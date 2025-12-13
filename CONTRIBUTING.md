@@ -19,6 +19,7 @@ The following is a set of guidelines for contributing to Server Survival. These 
 
 ## Development Workflow
 
+
 This project uses vanilla JavaScript, HTML, and CSS with Three.js. No build step is currently required for the core game, but we use a modular structure in `src/`.
 
 1.  Open `index.html` in your browser to run the game.

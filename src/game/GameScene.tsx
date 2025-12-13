@@ -98,7 +98,7 @@ const GameContent: React.FC = () => {
 
 
     const target = new THREE.Vector3();
-    raycaster.ray.intersectPlane(plane, target);
+    raycaster.ray.intersectPlane(plane.current, target);
     return { type: "ground", pos: target };
   }, [camera]);
 
@@ -249,17 +249,20 @@ const GameContent: React.FC = () => {
 
     if (!state.isRunning || state.timeScale === 0) return;
 
+    // Play BGM when game starts, and if not already playing or muted
+    if (state.gameStarted && soundService && !soundService.currentBgm?.paused && !state.sound?.muted) {
+      if (soundService.currentBgm === soundService.menuBgm && state.gameMode === 'survival') {
+        soundService.playGameBGM();
+      }
+    }
+
     // --- Game Logic Updates ---
 
     // Update requests
-    state.requests.forEach((req: Request) => req.update(dt));
-    // Remove completed requests (will need to filter state.requests via dispatch)
+    state.requests.forEach((req: Request) => req.update(dt)); // req.update needs to modify its own mesh
 
     // Update services
     state.services.forEach((svc: Service) => svc.update(dt, state, dispatch, state.services)); // Pass state and dispatch
-
-    // Update score UI (triggered by dispatch)
-    // updateScoreUI();
 
     // --- End Game Logic Updates ---
 
