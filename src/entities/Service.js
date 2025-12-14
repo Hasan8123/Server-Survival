@@ -120,7 +120,7 @@ class Service {
 
   upgrade() {
     if (!["compute", "db", "cache"].includes(this.type)) return;
-    const tiers = CONFIG.services[this.type].tiers;
+    const tiers = CONFIG.services[this.type]?.tiers;
     if (this.tier >= tiers.length) return;
 
     const nextTier = tiers[this.tier];
