@@ -1,4 +1,4 @@
- # Server Survival
+# Server Survival
 
 ![Gameplay Demo](assets/gameplay.gif)
 

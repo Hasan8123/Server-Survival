@@ -1,4 +1,4 @@
-export const TRAFFIC_TYPES = {
+const TRAFFIC_TYPES = {
   STATIC: "STATIC",
   READ: "READ",
   WRITE: "WRITE",
@@ -7,7 +7,7 @@ export const TRAFFIC_TYPES = {
   MALICIOUS: "MALICIOUS",
 };
 
-export const CONFIG = {
+const CONFIG = {
   gridSize: 30,
   tileSize: 4,
   colors: {
@@ -362,82 +362,3 @@ export const CONFIG = {
     },
   },
 };
-
-CONFIG.incomeTypes = [
-  {
-      key: "STATIC",
-      label: "Static",
-      color: "text-blue-400",
-      rate: CONFIG.trafficTypes.STATIC.reward,
-  },
-  {
-      key: "READ",
-      label: "DB Read",
-      color: "text-green-400",
-      rate: CONFIG.trafficTypes.READ.reward,
-  },
-  {
-      key: "WRITE",
-      label: "DB Write",
-      color: "text-yellow-400",
-      rate: CONFIG.trafficTypes.WRITE.reward,
-  },
-  {
-      key: "UPLOAD",
-      label: "Upload",
-      color: "text-purple-400",
-      rate: CONFIG.trafficTypes.UPLOAD.reward,
-  },
-  {
-      key: "SEARCH",
-      label: "Search",
-      color: "text-cyan-400",
-      rate: CONFIG.trafficTypes.SEARCH.reward,
-  },
-  { key: "blocked", label: "Blocked", color: "text-red-400", rate: 0.5 },
-];
-
-CONFIG.serviceTypes = [
-  {
-      key: "waf",
-      label: "WAF",
-      color: "text-red-400",
-      cost: CONFIG.services.waf.cost,
-  },
-  {
-      key: "alb",
-      label: "ALB",
-      color: "text-blue-400",
-      cost: CONFIG.services.alb.cost,
-  },
-  {
-      key: "compute",
-      label: "Compute",
-      color: "text-green-400",
-      cost: CONFIG.services.compute.cost,
-  },
-  {
-      key: "db",
-      label: "Database",
-      color: "text-yellow-400",
-      cost: CONFIG.services.db.cost,
-  },
-  {
-      key: "s3",
-      label: "S3",
-      color: "text-purple-400",
-      cost: CONFIG.services.s3.cost,
-  },
-  {
-      key: "cache",
-      label: "Cache",
-      color: "text-orange-400",
-      cost: CONFIG.services.cache.cost,
-  },
-  {
-      key: "sqs",
-      label: "SQS",
-      color: "text-cyan-400",
-      cost: CONFIG.services.sqs.cost,
-  },
-];

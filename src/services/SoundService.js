@@ -1,13 +1,4 @@
-export class SoundService {
-    private ctx: AudioContext | null;
-    private muted: boolean;
-    private masterGain: GainNode | null;
-    private gameBgm: HTMLAudioElement;
-    private menuBgm: HTMLAudioElement;
-    private currentBgm: HTMLAudioElement | null;
-    private sfxHover: HTMLAudioElement;
-    private sfxClick: HTMLAudioElement;
-
+class SoundService {
     constructor() {
         this.ctx = null;
         this.muted = true;
@@ -30,23 +21,23 @@ export class SoundService {
 
     init() {
         if (this.ctx) return;
-        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
         this.ctx = new AudioContext();
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = 0.3;
         this.masterGain.connect(this.ctx.destination);
 
         const resumeAudio = () => {
-            if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+            if (this.ctx.state === 'suspended') this.ctx.resume();
 
             // Try to play current BGM if set
             if (this.currentBgm && this.currentBgm.paused && !this.muted) {
-                this.currentBgm.play().catch(e => console.log("BGM autoplay blocked", e));
+                this.currentBgm.play().catch(e => console.log("BGM autoplay blocked"));
             }
 
             // We don't remove the listener immediately because sometimes the first click doesn't fully unlock everything depending on browser
             // But usually one click is enough. Let's keep it simple.
-            if (this.ctx && this.ctx.state === 'running') {
+            if (this.ctx.state === 'running') {
                 window.removeEventListener('click', resumeAudio);
                 window.removeEventListener('keydown', resumeAudio);
             }
@@ -63,10 +54,10 @@ export class SoundService {
         this.switchBGM(this.gameBgm);
     }
 
-    switchBGM(newBgm: HTMLAudioElement) {
+    switchBGM(newBgm) {
         if (this.currentBgm === newBgm) {
             if (this.currentBgm.paused && !this.muted && this.ctx && this.ctx.state === 'running') {
-                this.currentBgm.play().catch(e => { console.log("Waiting for interaction to play BGM", e); });
+                this.currentBgm.play().catch(e => { });
             }
             return;
         }
@@ -80,7 +71,7 @@ export class SoundService {
         if (!this.muted) {
             // If context is running, play immediately. Otherwise it will be picked up by resumeAudio
             if (this.ctx && this.ctx.state === 'running') {
-                this.currentBgm.play().catch(e => console.log("Waiting for interaction to play BGM", e));
+                this.currentBgm.play().catch(e => console.log("Waiting for interaction to play BGM"));
             }
         }
     }
@@ -99,7 +90,7 @@ export class SoundService {
         }
     }
 
-    toggleMute(): boolean {
+    toggleMute() {
         this.muted = !this.muted;
         if (this.masterGain) {
             this.masterGain.gain.value = this.muted ? 0 : 0.3;
@@ -108,13 +99,13 @@ export class SoundService {
         if (this.muted) {
             if (this.currentBgm) this.currentBgm.pause();
         } else {
-            if (this.currentBgm) this.currentBgm.play().catch(e => { console.log("BGM autoplay blocked", e); });
+            if (this.currentBgm) this.currentBgm.play().catch(e => { });
         }
 
         return this.muted;
     }
 
-    playTone(freq: number, type: OscillatorType, duration: number, startTime: number = 0) {
+    playTone(freq, type, duration, startTime = 0) {
         if (!this.ctx || this.muted) return;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
@@ -126,7 +117,7 @@ export class SoundService {
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + startTime + duration);
 
         osc.connect(gain);
-        gain.connect(this.masterGain!); // Use non-null assertion as masterGain should be initialized in init()
+        gain.connect(this.masterGain);
 
         osc.start(this.ctx.currentTime + startTime);
         osc.stop(this.ctx.currentTime + startTime + duration);
